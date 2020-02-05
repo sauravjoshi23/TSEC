@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 def index(request):
-    return HttpResponse('works')
+    return render(request, 'userlogin/index.html')
 
 def RegisterView(request):
     form = UserCreationForm(request.POST)
