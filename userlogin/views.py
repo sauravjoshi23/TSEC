@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import FormOne, FormTwo, DecisionForm, AttendanceForm
 from .models import Applicant, Absent
 from django.views import generic
+from django.contrib import messages
 
 import smtplib, ssl
 
@@ -46,6 +47,9 @@ def AttendanceView(request):
             applicant_obj = Applicant.objects.filter(email=email)
             absent_obj = Absent(name=applicant_obj[0].name, email=applicant_obj[0].email, school=applicant_obj[0].school)
             absent_obj.save()
+            attendance_form = AttendanceForm()
+            messages.success(request, "Your response has been recorded")
+
     else:
         attendance_form = AttendanceForm()
 
