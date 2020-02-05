@@ -87,6 +87,9 @@ def AcceptedView(request):
 def index(request):
     return render(request, 'userlogin/index.html')
 
+def dashboard(request):
+    return render(request, 'userlogin/dashboard.html')
+
 def RegisterView(request):
     form = UserCreationForm(request.POST)
     if form.is_valid():

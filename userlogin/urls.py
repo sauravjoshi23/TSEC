@@ -13,4 +13,5 @@ urlpatterns = [
     path('formtwo/', views.FormTwoView, name='form_two_view'),
     path('accepted/', views.AcceptedView, name='accepted_view'),
     path('rejected/', views.RejectedView, name='rejected_view'),
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]

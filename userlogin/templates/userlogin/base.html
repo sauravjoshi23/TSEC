@@ -31,6 +31,7 @@
                 <a class="nav-item nav-link">Welcome {{ request.user.username }} !</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% else %}
+                <a class="btn btn-success" href="{% url 'form_one_view' %}">Fill Form 1</a>
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
               {% endif %}
