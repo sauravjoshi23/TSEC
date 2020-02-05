@@ -24,7 +24,7 @@ class FormOne(forms.Form):
     phone_number = forms.CharField(max_length=200)
     clubs = forms.ChoiceField(choices=club_choices)
     city = forms.ChoiceField(choices=city_choices)
-
+    address = forms.CharField( max_length=200, widget=forms.Textarea(attrs={"rows" : 3, "cols" : 90}) )
 
 
 class FormTwo(forms.Form):

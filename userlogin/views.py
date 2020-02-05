@@ -3,11 +3,13 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .forms import FormOne, FormTwo
+from .models import Applicant
+from django.views import generic
 
+class ApplicantListView(generic.ListView):
+    pass
 
 def FormTwoView(request):
-    form_data = request.session['form_data']
-    print(form_data)
     formtwo = FormTwo()
     if request.method == 'POST':
         formtwo = FormTwo(request.POST)
@@ -16,6 +18,18 @@ def FormTwoView(request):
             experience = formtwo.cleaned_data.get('experience')
             why_aims = formtwo.cleaned_data.get('why_aims')
             # make a model out of all the available applicant data
+            form_data = request.session['form_data']
+            Applicant_obj = Applicant.objects.create(
+                    email = form_data['email'],
+                    name = form_data['name'],
+                    phone_number = form_data['phone_number'],
+                    clubs = form_data['clubs'],
+                    city = form_data['city'],
+                    address = form_data['address'],
+                    experience = experience,
+                    why_aims = why_aims,
+            )
+            Applicant_obj.save()
             return redirect('accepted_view')
 
     else :
@@ -37,6 +51,7 @@ def FormOneView(request):
             phone_number = formone.cleaned_data.get('phone_number')
             clubs = formone.cleaned_data.get('clubs')
             city = formone.cleaned_data.get('city')
+            address = formone.cleaned_data.get('address')
             print("clubs = ", clubs)
             print("city = ", city)
             print(type(city))
@@ -49,6 +64,7 @@ def FormOneView(request):
                     'phone_number' : phone_number,
                     'clubs' : clubs,
                     'city' : city,
+                    'address' : address,
                 }
                 request.session['form_data'] = form_data
                 return redirect('form_two_view')
