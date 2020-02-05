@@ -1,17 +1,12 @@
-class ApplicantListView(generic.ListView):
-    model = Applicant
-    conetxt_object_name = 'applicant_list'
-    queryset = Applicant.objects.filter(score=-1)
-    template_name = 'userlogin/applicant_list.html'
+TODO :
 
-class PhoneInterviewView(generic.ListView):
-    model = Applicant
-    conetxt_object_name = 'applicant_list'
-    queryset = Applicant.objects.filter(score=0)
-    template_name = 'userlogin/applicant_list.html' 
+1. School Seletion view should not show another accept/reject choice it should lead to school selection form some map API
 
-class FinalSelectedView(generic.ListView):
-    model = Applicant
-    conetxt_object_name = 'applicant_list'
-    queryset = Applicant.objects.filter(score=1)
-    template_name = 'userlogin/applicant_list.html'   
+2. Small things like adding a logout button in the dashboard template, adding a button in the corey template to fill the attendance 
+
+3. 
+
+
+
+
+  

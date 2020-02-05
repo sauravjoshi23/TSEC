@@ -10,6 +10,7 @@ class Applicant(models.Model):
     experience = models.CharField(max_length=200)
     why_aims = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
+    school = models.CharField(max_length=200)
     score = models.IntegerField(default=-1)
 
     def __str__(self):
@@ -17,3 +18,10 @@ class Applicant(models.Model):
 
     # def get_absolute_url(self):
     #     return reverse('model-detail-view', args=[str(self.id)])
+
+class Absent(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    school = models.CharField(max_length=200)
+    def __str__(self):
+        return self.name

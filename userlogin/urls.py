@@ -19,10 +19,12 @@ urlpatterns = [
     path('phone_list/', views.PhoneInterviewView, name='phone_interview_view'),
     path('phone_list/<int:pk>', views.ApplicantDetailView, name='application_detail_view'),
     path('selected_list/', views.FinalSelectedView, name='final_selected_view'),
-    path('selected_list/<int:pk>', views.ApplicantDetailView, name='application_detail_view'),
+    path('selected_list/<int:pk>', views.SchoolSelectionView, name='school_selection_view'),
 
-    # path('sendmail/<pk>', views.send_mail, name='send_mail_view')
+    path('attendance', views.AttendanceView, name='attendance_view'),
+    path('absent', views.DisplayAbsentView, name='display_absent_view'),
 
+    
     ### testing
     path('testing/', views.testing, name='testing_view'),
 
