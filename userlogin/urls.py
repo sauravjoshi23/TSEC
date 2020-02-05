@@ -9,7 +9,8 @@ urlpatterns = [
     path('register/', views.RegisterView, name='register'),
     path('login/',auth_views.LoginView.as_view(template_name='userlogin/login.html'), name='login'),
     path('logout/',auth_views.LogoutView.as_view(template_name='userlogin/logout.html'), name='logout'),
-    path('formone/', views.FormOneView, name='form_one_page'),
-    path('accepted/', views.AcceptedView, name='accepted_page'),
-    path('rejected/', views.RejectedView, name='rejected_page'),
+    path('formone/', views.FormOneView, name='form_one_view'),
+    path('formtwo/', views.FormTwoView, name='form_two_view'),
+    path('accepted/', views.AcceptedView, name='accepted_view'),
+    path('rejected/', views.RejectedView, name='rejected_view'),
 ]

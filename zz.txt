@@ -17,33 +17,45 @@ jhfsdkjhfkdsj
 
 git reset --hard FETCH_HEAD
 
+Change remote url:
+git remote set-url origin https://github.com/RayyanMerchant/TSEC.git
+
+
+git fetch origin master
+
+git reset --hard FETCH_HEAD
+
+
+
+Github branch same level as master :
+git fetch upstream
+git reset --hard upstream/master
 
 
 
 
 
 
+Idea but not implement :
+upload aadhar card, paan card
 
 
 
+comment= forms.CharField(widget=forms.Textarea)
+
+
+comment= forms.CharField(widget=forms.Textarea(attrs={"rows":5, "cols":20}))
 
 
 
+name = forms.CharField(widget=forms.TextInput(attrs={'class': 'special'}))
 
 
 
+https://www.quora.com/How-do-I-pass-and-retrieve-arguments-between-views-in-Django
 
 
-
-
-
-
-
-
-
-
-
-
+request.session[‘test’] = 123
 
 
 

@@ -2,8 +2,29 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from .forms import FormOne
+from .forms import FormOne, FormTwo
 
+
+def FormTwoView(request):
+    form_data = request.session['form_data']
+    print(form_data)
+    formtwo = FormTwo()
+    if request.method == 'POST':
+        formtwo = FormTwo(request.POST)
+
+        if formtwo.is_valid():
+            experience = formtwo.cleaned_data.get('experience')
+            why_aims = formtwo.cleaned_data.get('why_aims')
+            # make a model out of all the available applicant data
+            return redirect('accepted_view')
+
+    else :
+        formtwo = FormTwo()
+    
+    context = {
+        'form' : formtwo,
+    }
+    return render(request, 'userlogin/formtwo.html', context)
 
 def FormOneView(request):
     formone = FormOne()
@@ -21,23 +42,30 @@ def FormOneView(request):
             print(type(city))
             if clubs == 'Other' or city == 'Other':
                 return render(request, 'userlogin/rejected.html')
-                # redirect('/rejected')
             else :
-                return render(request, 'userlogin/accepted.html')
-                # redirect('/accepted')
+                form_data = {
+                    'name' : name,
+                    'email' : email,
+                    'phone_number' : phone_number,
+                    'clubs' : clubs,
+                    'city' : city,
+                }
+                request.session['form_data'] = form_data
+                return redirect('form_two_view')
+                # return render(request, 'userlogin/accepted.html')
     else:
         formone = FormOne()
     
     context = {
-        'form' : formone
+        'form' : formone,
     }
     return render(request, 'userlogin/formone.html', context)
 
 def RejectedView(request):
-    return render(request, 'userlogin/accepted.html')
+    return render(request, 'userlogin/rejected.html')
 
 def AcceptedView(request):
-    return render(requets, 'userlogin/rejected.html')
+    return render(request, 'userlogin/accepted.html')
 
 
 def index(request):
