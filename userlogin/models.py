@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 class Applicant(models.Model):
     email = models.EmailField() # unique
@@ -10,5 +11,9 @@ class Applicant(models.Model):
     why_aims = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
     score = models.IntegerField(default=-1)
+
     def __str__(self):
         return self.name
+
+    # def get_absolute_url(self):
+    #     return reverse('model-detail-view', args=[str(self.id)])

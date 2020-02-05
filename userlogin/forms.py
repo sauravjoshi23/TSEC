@@ -18,6 +18,11 @@ city_choices = (
     ("Other", "Other"),
 )
 
+decision_dict = (
+    ("Accept", "Accept"),
+    ("Reject", "Reject"),
+)
+
 class FormOne(forms.Form):
     email = forms.EmailField()
     name = forms.CharField(max_length=200)
@@ -33,7 +38,8 @@ class FormTwo(forms.Form):
 
 
 
-
+class DecisionForm(forms.Form):
+    decision = forms.ChoiceField(choices=decision_dict)
 
 
 

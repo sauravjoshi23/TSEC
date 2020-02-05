@@ -2,12 +2,101 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from .forms import FormOne, FormTwo
+from .forms import FormOne, FormTwo, DecisionForm
 from .models import Applicant
 from django.views import generic
 
-class ApplicantListView(generic.ListView):
-    pass
+import smtplib
+
+
+def ApplicantListView(request):
+    queryset = Applicant.objects.filter(score=-1)
+    context = {
+        'applicant_list' : queryset,
+        'title' : 'Applicant List',
+    }
+    return render(request, 'userlogin/applicant_list.html', context)  
+
+def PhoneInterviewView(request):
+    queryset = Applicant.objects.filter(score=0)
+    context = {
+        'applicant_list' : queryset,
+        'title' : 'Phone Interview List',
+    }
+    return render(request, 'userlogin/applicant_list.html', context)    
+
+def FinalSelectedView(request):
+    queryset = Applicant.objects.filter(score=1)
+    context = {
+        'applicant_list' : queryset,
+        'title' : 'Final List/ School Selection',
+    }
+    return render(request, 'userlogin/applicant_list.html', context)
+
+def ApplicantDetailView(request, pk):
+    try:
+        applicant = Applicant.objects.get(pk=pk)
+    except Applicant.DoesNotExist:
+        raise Http404('Applicant does not exist')
+    decision_form = DecisionForm()
+    
+    if request.method == 'POST' :
+        decision_form = DecisionForm(request.POST)
+        if decision_form.is_valid():
+            decision = decision_form.cleaned_data.get('decision')
+            print('decision = ', decision)
+
+            redirect_url = ""
+            if applicant.score == -1:
+                redirect_url = 'applicant_list_view'
+            elif applicant.score == 0:
+                redirect_url = 'phone_interview_view'
+            elif applicant.score == 1:
+                redirect_url = 'final_selected_view'
+
+            print('redirect_url = ', redirect_url)
+            if decision == 'Accept':
+                applicant.score += 1
+                applicant.save()
+                # send accepted email
+                email = applicant.email
+                message = "You have passed the first stage. Prepare fot the phone interview"
+                
+
+            else :
+                applicant.score = -2
+                applicant.save()
+                #send rejected email
+
+
+            return redirect(redirect_url)
+    else:
+        decision_form = DecisionForm()
+
+    context = {
+        'applicant': applicant,
+        'form' : decision_form
+    }
+    return render(request, 'userlogin/applicant_detail.html', context)
+
+
+def sendymaily(content, receiver):
+    print('inside sendy maily')
+    mail = smtplib.SMTP('smtp.rediff.com',587)
+    mail.ehlo()
+    mail.starttls()
+    mail.login('sj2362000@rediff.com','Abcde123@')
+    mail.sendmail('sj2362000@rediff.com',receiver,content)
+    mail.close()
+
+
+def testing(request):
+    queryset = Applicant.objects.filter(score=2)
+    context = {
+        'queryset' : queryset,
+    }
+    return render(request, "userlogin/testing.html", context)
+
 
 def FormTwoView(request):
     formtwo = FormTwo()

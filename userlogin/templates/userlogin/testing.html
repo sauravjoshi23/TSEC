@@ -1,0 +1,17 @@
+{% extends "userlogin/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        {% for cur in queryset %}
+            <p>
+                {{cur.name}}<br>
+                {{cur.email}}<br>
+                {{cur.score}}<br>
+                {{cur.address}}<br>
+                id = {{cur.id}} <br>
+                
+            </p>
+        {% endfor %}
+    </div>
+{% endblock content %}
+

@@ -1,0 +1,24 @@
+{% extends "userlogin/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <h3> Applicant Details </h3>
+        <pre>
+            Email :                 {{ applicant.email }} <br>
+            Name :                  {{ applicant.name }} <br>
+            Phone Number :          {{ applicant.phone_number }} <br>
+            Address :               {{ applicant.address }} <br>
+            City :                  {{ applicant.city }} <br>
+            Club :                  {{ applicant.clubs }} <br>
+            Past Experience :       {{ applicant.experience }} <br>
+            Aims/Reasons :          {{ applicant.why_aims }} <br>
+            
+        </pre>
+        <form method='post'>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type='submit' value='submit' class='btn btn-success'>
+        </form>
+    </div>
+{% endblock content %}
+

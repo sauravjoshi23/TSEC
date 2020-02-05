@@ -1,0 +1,17 @@
+class ApplicantListView(generic.ListView):
+    model = Applicant
+    conetxt_object_name = 'applicant_list'
+    queryset = Applicant.objects.filter(score=-1)
+    template_name = 'userlogin/applicant_list.html'
+
+class PhoneInterviewView(generic.ListView):
+    model = Applicant
+    conetxt_object_name = 'applicant_list'
+    queryset = Applicant.objects.filter(score=0)
+    template_name = 'userlogin/applicant_list.html' 
+
+class FinalSelectedView(generic.ListView):
+    model = Applicant
+    conetxt_object_name = 'applicant_list'
+    queryset = Applicant.objects.filter(score=1)
+    template_name = 'userlogin/applicant_list.html'   
