@@ -1,0 +1,12 @@
+TODO :
+
+1. School Seletion view should not show another accept/reject choice it should lead to school selection form some map API
+
+2. Small things like adding a logout button in the dashboard template, adding a button in the corey template to fill the attendance 
+
+3. 
+
+
+
+
+  

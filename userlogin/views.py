@@ -2,12 +2,157 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from .forms import FormOne, FormTwo
-from .models import Applicant
+from .forms import FormOne, FormTwo, DecisionForm, AttendanceForm
+from .models import Applicant, Absent
 from django.views import generic
 
-class ApplicantListView(generic.ListView):
-    pass
+import smtplib, ssl
+
+
+def SchoolSelectionView(request, pk):
+    try:
+        applicant = Applicant.objects.get(pk=pk)
+    except Applicant.DoesNotExist:
+        raise Http404('Applicant does not exist')
+    
+    address = applicant.address
+    club = applicant.clubs
+    """
+    using applicant's address and interest/clubs find the most suitable school and assign it to him
+    """
+    school = 'default : xyz'
+    applicant.school = school
+    applicant.save()
+    message = 'You have been assigned to ' + school + ' school'
+    context = {
+        'applicant': applicant,
+    }
+    return render(request, 'userlogin/school_selection.html', context)
+
+def DisplayAbsentView(request):
+    queryset = Absent.objects.all()
+    context = {
+        'queryset' : queryset,
+    }
+    return render(request, 'userlogin/absent.html', context)
+
+def AttendanceView(request):
+    attendance_form = AttendanceForm()
+
+    if request.method == 'POST':
+        attendance_form = AttendanceForm(request.POST)
+        if attendance_form.is_valid():
+            email = attendance_form.cleaned_data.get('email')
+            applicant_obj = Applicant.objects.filter(email=email)
+            absent_obj = Absent(name=applicant_obj[0].name, email=applicant_obj[0].email, school=applicant_obj[0].school)
+            absent_obj.save()
+    else:
+        attendance_form = AttendanceForm()
+
+    context = {
+        'form' : attendance_form,
+    }
+    return render(request, 'userlogin/attendance.html', context)
+
+
+def ApplicantListView(request):
+    queryset = Applicant.objects.filter(score=-1)
+    context = {
+        'applicant_list' : queryset,
+        'title' : 'Applicant List',
+    }
+    return render(request, 'userlogin/applicant_list.html', context)  
+
+
+def PhoneInterviewView(request):
+    queryset = Applicant.objects.filter(score=0)
+    context = {
+        'applicant_list' : queryset,
+        'title' : 'Phone Interview List',
+    }
+    return render(request, 'userlogin/applicant_list.html', context)    
+
+
+def FinalSelectedView(request):
+    queryset = Applicant.objects.filter(score=1)
+    context = {
+        'applicant_list' : queryset,
+        'title' : 'Final List/ School Selection',
+    }
+    return render(request, 'userlogin/applicant_list.html', context)
+
+def ApplicantDetailView(request, pk):
+    try:
+        applicant = Applicant.objects.get(pk=pk)
+    except Applicant.DoesNotExist:
+        raise Http404('Applicant does not exist')
+    decision_form = DecisionForm()
+    
+    if request.method == 'POST' :
+        decision_form = DecisionForm(request.POST)
+        if decision_form.is_valid():
+            decision = decision_form.cleaned_data.get('decision')
+            print('decision = ', decision)
+
+            redirect_url = ""
+            success_message = "generic congrats message"
+            if applicant.score == -1:
+                redirect_url = 'applicant_list_view'
+                success_message = "Congratulations!!! You have passed the first stage. We will contact you about the phone interview timings soon"
+            elif applicant.score == 0:
+                redirect_url = 'phone_interview_view'
+                success_message = "Congratulations!!! You have cleared the phone interview and are selected. We will contact you about the school selection procedure soon"
+            elif applicant.score == 1:
+                redirect_url = 'final_selected_view'
+
+            print('redirect_url = ', redirect_url)
+            if decision == 'Accept':
+                applicant.score += 1
+                applicant.save()
+                # send accepted email
+                sendymaily(success_message, applicant.email)
+
+            else :
+                applicant.score = -2
+                applicant.save()
+                failure = "Sorry to infrom you but your application has been rejected. Please consider applying again later"
+                #send rejected email
+                sendymaily(failure, applicant.email)
+
+            return redirect(redirect_url)
+    else:
+        decision_form = DecisionForm()
+
+    context = {
+        'applicant': applicant,
+        'form' : decision_form
+    }
+    return render(request, 'userlogin/applicant_detail.html', context)
+
+
+
+def sendymaily(message, receiver):
+    sender = 'sauravjoshi2362000@gmail.com'
+    password = 'maxverstappen@33'  
+    port = 465
+
+    recieve = receiver
+    context = ssl.create_default_context()
+    print("Starting to send")
+    with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+        server.login(sender, password)
+        server.sendmail(sender, recieve, message)
+
+    print("sent email!")
+
+
+def testing(request):
+    queryset = Applicant.objects.filter(score=2)
+    context = {
+        'queryset' : queryset,
+    }
+    return render(request, "userlogin/testing.html", context)
+
 
 def FormTwoView(request):
     formtwo = FormTwo()

@@ -18,6 +18,11 @@ city_choices = (
     ("Other", "Other"),
 )
 
+decision_dict = (
+    ("Accept", "Accept"),
+    ("Reject", "Reject"),
+)
+
 class FormOne(forms.Form):
     email = forms.EmailField()
     name = forms.CharField(max_length=200)
@@ -31,9 +36,9 @@ class FormTwo(forms.Form):
     experience = forms.CharField(label="Please describe your past experience in this field.", widget=forms.Textarea(attrs={"rows" : 7, "cols" : 90}))
     why_aims = forms.CharField(label="Why do want to do this and what do you hope to achieve ?", widget=forms.Textarea(attrs={"rows" : 7, "cols" : 90}))
 
+class DecisionForm(forms.Form):
+    decision = forms.ChoiceField(choices=decision_dict)
 
-
-
-
-
+class AttendanceForm(forms.Form):
+    email = forms.EmailField()
 

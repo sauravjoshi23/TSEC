@@ -1,0 +1,19 @@
+{% extends "userlogin/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <h3> Applicant Details </h3>
+        <pre>
+            Email :                 {{ applicant.email }} <br>
+            Name :                  {{ applicant.name }} <br>
+            Phone Number :          {{ applicant.phone_number }} <br>
+            Address :               {{ applicant.address }} <br>
+            City :                  {{ applicant.city }} <br>
+            Club :                  {{ applicant.clubs }} <br>
+            School Assigned:        {{ applicant.school }} <br>
+            
+        </pre>
+        <button class='btn btn-success'> Find </button>
+    </div>
+{% endblock content %}
+

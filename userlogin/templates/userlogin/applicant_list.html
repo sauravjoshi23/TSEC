@@ -1,0 +1,18 @@
+{% extends "userlogin/dashboard.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <h3>{{ title }}</h3> 
+        {% if applicant_list %}
+            <ul>
+            {% for applicant in applicant_list %}
+                <li> 
+                    <a href="{{ applicant.id }}"">{{ applicant.name }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p> No pending applications.</p>
+        {% endif %}
+    </div>
+{% endblock content %}

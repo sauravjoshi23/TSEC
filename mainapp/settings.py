@@ -121,3 +121,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = 'index_page'
+
+
+EMAIL_HOST = 'smtp.rediff.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sj2362000@rediff.com'
+EMAIL_HOST_PASSWORD = 'Abcde123@'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
