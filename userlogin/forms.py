@@ -24,3 +24,16 @@ class FormOne(forms.Form):
     phone_number = forms.CharField(max_length=200)
     clubs = forms.ChoiceField(choices=club_choices)
     city = forms.ChoiceField(choices=city_choices)
+
+
+
+class FormTwo(forms.Form):
+    experience = forms.CharField(label="Please describe your past experience in this field.", widget=forms.Textarea(attrs={"rows" : 7, "cols" : 90}))
+    why_aims = forms.CharField(label="Why do want to do this and what do you hope to achieve ?", widget=forms.Textarea(attrs={"rows" : 7, "cols" : 90}))
+
+
+
+
+
+
+
