@@ -55,7 +55,8 @@ name = forms.CharField(widget=forms.TextInput(attrs={'class': 'special'}))
 https://www.quora.com/How-do-I-pass-and-retrieve-arguments-between-views-in-Django
 
 
-request.session[‘test’] = 123
+store data in session / query : 
+request.session['test'] = 123
 
 
 
