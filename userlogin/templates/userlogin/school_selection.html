@@ -1,19 +1,38 @@
-{% extends "userlogin/dashboard.html" %}
+{% extends "userlogin/new_dash.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
-        <h3> Applicant Details </h3>
-        <pre>
-            Email :                 {{ applicant.email }} <br>
-            Name :                  {{ applicant.name }} <br>
-            Phone Number :          {{ applicant.phone_number }} <br>
-            Address :               {{ applicant.address }} <br>
-            City :                  {{ applicant.city }} <br>
-            Club :                  {{ applicant.clubs }} <br>
-            School Assigned:        {{ applicant.school }} <br>
-            
-        </pre>
-        <button class='btn btn-success'> Find </button>
-    </div>
+    <div id="mapid"></div>
+    <script>
+        var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+        const attribution =
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+        const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const tiles = L.tileLayer(tileUrl, { attribution });
+        tiles.addTo(mymap)
+
+        var greenIcon = new L.Icon({
+            iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        // var latLng = toLatLng(19.0760, 72.8777, myMap);
+
+        a = [19.0760,18.5204,17.6805,18.7557,17.9307, 19.9975]
+        b = [72.8777,73.8567,74.0183,73.4091,73.6477, 73.7898]
+        
+        L.marker([{{user_x}} , {{user_y}}]).addTo(mymap);
+        for(var i = 0; i < 6; ++ i)
+        {
+            L.marker([a[i], b[i]], {icon: greenIcon}).addTo(mymap);
+        }
+
+    </script>
+    <p>
+        The closest place is {{closest}}.
+    </p>
 {% endblock content %}
 

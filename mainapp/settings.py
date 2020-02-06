@@ -120,7 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-LOGIN_REDIRECT_URL = 'index_page'
+LOGIN_REDIRECT_URL = 'dashboard'
 
 
 EMAIL_HOST = 'smtp.rediff.com'

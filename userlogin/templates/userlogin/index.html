@@ -1,4 +1,12 @@
 {% extends "userlogin/base.html" %}
 {% block content %}
-    <h2>Works!!</h2>
+    {% if user.is_authenticated %}
+    {% else %}
+        <div class="wrapper">
+            <a href="{% url 'form_one_view' %}"><button class="block" >Fill Form 1</button></a>
+        </div>
+        <div class="wrapper">
+            <a href="{% url 'attendance_view' %}"><button class="block1" >Fill Attendence</button></a>
+        </div>
+    {% endif %}
 {% endblock content %}

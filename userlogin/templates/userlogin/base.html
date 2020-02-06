@@ -2,7 +2,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+  <style>
+    .block {
+      display: block;
+      width: 45%;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px 30px;
+      font-size: 36px;
+      cursor: pointer;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+    }
+    .block1 {
+      display: block1;
+      width: 45%;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px 30px;
+      font-size: 36px;
+      cursor: pointer;
+      text-align: center;
+      position: absolute;
+      top: 100%;
+    }
+    
+    .block:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    .block1:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    .wrapper {
+    text-align: center;
+    }
+    </style>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -31,7 +70,7 @@
                 <a class="nav-item nav-link">Welcome {{ request.user.username }} !</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% else %}
-                <a class="btn btn-success" href="{% url 'form_one_view' %}">Fill Form 1</a>
+                <!-- <a class="btn btn-success" href="{% url 'form_one_view' %}">Fill Form 1</a> -->
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
               {% endif %}
@@ -46,7 +85,7 @@
           {% if messages %}
             {% for message in messages %}
               <div class="alert alert-{{ message.tags }}">
-                {{ message }}
+                <!-- {{ message }} -->
               </div>
             {% endfor %}
           {% endif %}
