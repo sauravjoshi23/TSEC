@@ -3,37 +3,96 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from .forms import FormOne, FormTwo, DecisionForm, AttendanceForm
-from .models import Applicant, Absent
+from .models import Applicant, Absent, School
 from django.views import generic
 from django.contrib import messages
+from . whatsapp import func
+import smtplib, ssl, time
+from geopy.geocoders import Nominatim
+import random, math
 
-import smtplib, ssl
+def MessageView(request):
+    schools = School.objects.all()
+    for school in schools:
+        queryset = Applicant.objects.filter(school=school).order_by('clubs')
+        message = ""
+        for cur in queryset:
+            if not Absent.objects.filter(email=cur.email):
+                message += cur.clubs + "  " + cur.name + "  " + cur.phone_number + "\n"
+            else:
+                message += "----------------------------------------"
+        
+        """
+        here we are assuming the whatsapp group to have the same name as the school name
+        """
+        func('Test', message)
+    
+    
+    return redirect('dashboard')
 
+def calc_dist(lat1, lon1, lat2, lon2):
+    lat1 = math.radians(lat1)
+    lon1 = math.radians(lat1)
+    lat2 = math.radians(lat2)
+    lon2 = math.radians(lon2)
+    
+    phi1 = lat1
+    phi2 = lat2
+    delta_phi = lat2 - lat1
+    delta_lambda = lon2 - lon1
+
+    a = (math.sin(delta_phi/2) * math.sin(delta_phi/2)) + (math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda/2) * math.sin(delta_lambda/2))
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    R = 6371
+    dist = R  * c
+    return dist
 
 def SchoolSelectionView(request, pk):
     try:
         applicant = Applicant.objects.get(pk=pk)
     except Applicant.DoesNotExist:
         raise Http404('Applicant does not exist')
-    
+
     address = applicant.address
-    club = applicant.clubs
-    """
-    using applicant's address and interest/clubs find the most suitable school and assign it to him
-    """
-    school = 'default : xyz'
-    applicant.school = school
-    applicant.save()
-    message = 'You have been assigned to ' + school + ' school'
+    geolocator = Nominatim(user_agent="specify_your_app_name_here")
+    cur_location = geolocator.geocode(address)
+    
+    user_x = cur_location.latitude
+    user_y = cur_location.longitude   
+    schools = School.objects.all()
+    city = ['Mumbai', 'Pune', 'Satara', 'Lonavla', 'Mahabaleshwar', 'Nashik']
+    a = [19.0760,18.5204,17.6805,18.7557,17.9307, 19.9975]
+    b = [72.8777,73.8567,74.0183,73.4091,73.6477, 73.7898]
+    mn = 10 ** 18
+    closest = 0
+    dist = mn
+    for i in range(6):
+        cur = calc_dist(user_x, user_y, a[i], b[i])
+        if cur < mn:
+            mn = cur
+            closest = i
+            dist = mn
     context = {
-        'applicant': applicant,
+        'user_x' : user_x,
+        'user_y' : user_y,
+        'closest' : city[closest],
+        'dist' : dist,
     }
     return render(request, 'userlogin/school_selection.html', context)
 
 def DisplayAbsentView(request):
-    queryset = Absent.objects.all()
+    schools = School.objects.all()
+    dic = {}
+    for school in schools:
+        cnt = Absent.objects.filter(school=school).count()
+        
+        if cnt > 0:
+            dic[school.name] = cnt
+            print(school.name)
+            print(cnt)
+    
     context = {
-        'queryset' : queryset,
+        'queryset' : dic,
     }
     return render(request, 'userlogin/absent.html', context)
 
@@ -151,7 +210,9 @@ def sendymaily(message, receiver):
 
 
 def testing(request):
-    queryset = Applicant.objects.filter(score=2)
+    
+    queryset = School.objects.all()
+
     context = {
         'queryset' : queryset,
     }
@@ -178,6 +239,10 @@ def FormTwoView(request):
                     experience = experience,
                     why_aims = why_aims,
             )
+
+
+            
+
             Applicant_obj.save()
             return redirect('accepted_view')
 

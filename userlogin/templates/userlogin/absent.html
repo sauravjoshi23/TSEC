@@ -4,11 +4,11 @@
     <div class="content-section">
     {% if queryset %}
         <h3> Absentees </h3>
-        {% for absentee in queryset %}
-            Email :                 {{ absentee.email }} <br>
-            Name :                  {{ absentee.name }} <br>
-            School :                {{ absentee.school }} <br>
-            <br> <br>
+        {% for key, val in queryset.items %}
+        <h5>
+            School :                {{key}} <br>
+            Count :                 {{val}}<br>
+            <br> <br></h5>
         {% endfor %}
     {% else %}
         <p> No absentees</p>

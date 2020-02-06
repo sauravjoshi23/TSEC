@@ -24,6 +24,7 @@ urlpatterns = [
     path('attendance', views.AttendanceView, name='attendance_view'),
     path('absent', views.DisplayAbsentView, name='display_absent_view'),
 
+    path('messages', views.MessageView, name='message_view'),
     
     ### testing
     path('testing/', views.testing, name='testing_view'),
